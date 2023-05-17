@@ -1,0 +1,20 @@
+#grid {
+    display: grid;
+    grid-template-columns: repeat(71, 15px);
+    grid-template-rows: repeat(46, 15px);
+    gap: 1px;
+    width: 1065px; /* 15px * 71 cells */
+    height: 690px;
+}
+.cell {
+    width: 15px;
+    height: 15px;
+    border: 1px solid grey;
+    background-color: antiquewhite;
+}
+.start {
+    background-color: green;
+}
+.finish {
+    background-color: red;
+}
