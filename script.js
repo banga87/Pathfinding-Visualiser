@@ -10,8 +10,11 @@ let selectFinish = document.getElementById('select-finish').addEventListener('cl
     selectingFinish = true;
 })
 
-let startTraversal = document.getElementById('start-traversal')
+let startTraversal = document.getElementById('start-traversal');
 
+let clearBoard = document.getElementById('clear-board').addEventListener('click', () => {
+    clearTheBoard();
+})
 
 // CREATE THE GRID
 const createGrid = () => {
@@ -31,6 +34,7 @@ const createGrid = () => {
                 isStart: false,
                 isFinish: false,
                 isWall: false,
+                weight: 0,
                 traversed: false,
                 element: cellElement
             };
@@ -76,6 +80,18 @@ const removeStartLocation = () => {
 }
 
 
+// REMOVE ALL WEIGHTS
+const removeAllWeights = () => {
+    for (let i = 0; i < cells.length; i++) {
+        for (let j = 0; j < cells[i].length; j++) {
+            if (cells[i][j].weight !== 0) {
+                cells[i][j].weight = 0;
+            }
+        }
+    }
+}
+
+
 // REMOVE FINISH LOCATION
 const removeFinishLocation = () => {
     for (let i = 0; i < cells.length; i++) {
@@ -87,6 +103,48 @@ const removeFinishLocation = () => {
         }
     }
 }
+
+
+// REMOVE ALL WALLS
+const removeAllWalls = () => {
+    for (let i = 0; i < cells.length; i++) {
+        for (let j = 0; j < cells[i].length; j++) {
+            if (cells[i][j].isWall) {
+                cells[i][j].isWall = false;
+            }
+        }
+    }
+}
+
+
+// REMOVE TRAVERSAL STATUS
+const removeTraversalStatus = () => {
+    for (let i = 0; i < cells.length; i++) {
+        for (let j = 0; j < cells[i].length; j++) {
+            if (cells[i][j].traversed) {
+                cells[i][j].traversed = false;
+            }
+        }
+    }
+}
+
+
+// CLEAR THE BOARD
+const clearTheBoard = () => {
+    removeStartLocation();
+    removeFinishLocation();
+    removeTraversalStatus();
+    removeAllWalls();
+}
+
+
+// CREATE WEIGHTS
+
+
+// CREATE WALLS
+
+
+
 
 
 createGrid();
