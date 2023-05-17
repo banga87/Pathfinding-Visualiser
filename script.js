@@ -2,6 +2,7 @@ const cells = []
 let selectingStart = false;
 let selectingFinish = false;
 
+// BUTTONS
 let selectStart = document.getElementById('select-start').addEventListener('click', () => {
     selectingStart = true;
 });
@@ -152,15 +153,3 @@ createGrid();
 
 
 
-// const breadthFirstSearch = () => {
-//     let visited = new Set();
-//     let path = []
-
-//     const bfs = (x, y) => {
-//         if (x < 0 ||
-//             x === xAxis ||
-//             y < 0 ||
-//             y === yAxis )
-//     }
-
-// }
