@@ -189,7 +189,7 @@ const depthFirstSearch = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'red';
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
                 await sleep(10);
             }
 
