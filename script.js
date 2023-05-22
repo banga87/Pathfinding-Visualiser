@@ -1,21 +1,30 @@
 const cells = []
 let selectingStart = false;
 let selectingFinish = false;
+let selectingWall = false;
 let startCell = null;
 let finishCell = null;
+let mouseDown = false;
 
 // BUTTONS
 let selectStart = document.getElementById('select-start').addEventListener('click', () => {
     selectingStart = true;
+    selectingWall = false; // Disable wall selection
 });
 
 let selectFinish = document.getElementById('select-finish').addEventListener('click', () => {
     selectingFinish = true;
+    selectingWall = false; // Disable wall selection
+})
+
+let selectWall = document.getElementById('select-wall').addEventListener('click', () => {
+    selectingWall = !selectingWall;
 })
 
 let startTraversal = document
 .getElementById('start-traversal')
 .addEventListener('click', ()=> {
+    selectingWall = false; // Disable wall selection
     if (startCell === null) {
         alert("Please set a Start Location")
     } else if (finishCell === null) {
@@ -26,6 +35,7 @@ let startTraversal = document
 });
 
 let clearBoard = document.getElementById('clear-board').addEventListener('click', () => {
+    selectingWall = false;
     clearTheBoard();
 })
 
@@ -75,6 +85,36 @@ const createGrid = () => {
                     console.log("FINISH", cell)
                 }
             })
+
+            // ONCLICK SET THE CELL TO WALL
+            cell
+
+            cellElement.addEventListener('click', () => {
+                if (selectingWall) {
+                    cell.isWall = true;
+                    cellElement.style.backgroundColor = 'black'
+                }
+            })
+
+            cellElement.addEventListener('mousedown', () => {
+                if (selectingWall) {
+                    mouseDown = true;
+                    cell.isWall = true;
+                    cellElement.style.backgroundColor = 'black';
+                }
+            })
+
+            cellElement.addEventListener('mouseenter', () => {
+                if (selectingWall && mouseDown) {
+                    cell.isWall = true;
+                    cellElement.style.backgroundColor = 'black';
+                }
+            })
+
+            cellElement.addEventListener('mouseup', () => {
+                mouseDown = false;
+            })
+
             row.push(cell);
         }
         cells.push(row)
