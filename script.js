@@ -21,6 +21,11 @@ let selectWall = document.getElementById('select-wall').addEventListener('click'
     selectingWall = !selectingWall;
 })
 
+let addWeights = document.getElementById('add-weights').addEventListener('click', () => {
+    selectingWall = !selectingWall;
+    randomizeWeights();
+})
+
 let startTraversal = document
 .getElementById('start-traversal')
 .addEventListener('click', async ()=> {
@@ -36,6 +41,10 @@ let startTraversal = document
             path = await depthFirstSearch(cells, startCell, finishCell)
         } else if (traversalMethod === 'breadthFirstSearch') {
             path = await breadthFirstSearch(cells, startCell, finishCell)
+        } else if (traversalMethod === 'dijkstra') {
+            path = await dijkstrasAlgorithm(cells, startCell, finishCell)
+        } else if (traversalMethod === 'aStar') {
+            path = await aStarAlgorithm(cells, startCell, finishCell)
         } else {
             console.log("Invalid traversal method")
         }
@@ -152,12 +161,29 @@ const removeStartLocation = () => {
 }
 
 
+// RANDOMIZE WEIGHTS
+const randomizeWeights = () => {
+    for (let i = 0; i < cells.length; i++) {
+        for (let j = 0; j < cells[i].length; j++) {
+            const randomWeight = Math.floor(Math.random() * 10);
+            if (randomWeight <= 5) {
+                cells[i][j].weight = randomWeight;
+                if (cells[i][j].weight !== 0) {
+                    cells[i][j].element.innerHTML = randomWeight;
+                }   
+            }
+        }
+    }
+}
+
+
 // REMOVE ALL WEIGHTS
 const removeAllWeights = () => {
     for (let i = 0; i < cells.length; i++) {
         for (let j = 0; j < cells[i].length; j++) {
             if (cells[i][j].weight !== 0) {
                 cells[i][j].weight = 0;
+                cells[i][j].element.innerHTML = '';
             }
         }
     }
@@ -222,10 +248,8 @@ const clearTheBoard = () => {
     removeVisitedStatus();
     removeAllWalls();
     resetPath();
+    removeAllWeights();
 }
-
-
-// CREATE WEIGHTS
 
 
 // CREATE WALLS
@@ -337,5 +361,109 @@ const breadthFirstSearch = async (grid, start, finish) => {
     console.log("NO PATH FOUND")
     return null
 }
+
+
+// DIJKSTRA'S ALGORITHM
+const dijkstrasAlgorithm = async (grid, start, finish) => {
+    let startLocation = [start.x, start.y]
+    let finishLocation = [finish.x, finish.y]
+    let queue = [[startLocation, [startLocation], 0]];
+    let visited = new Set([start.toString()]);
+    let distances = new Map();
+    distances.set(startLocation.toString(), 0);
+
+    while (queue.length > 0) {
+        let [vertex, path, distance] = queue.shift();
+
+        // If it's not the start or finish, color the cell and wait
+        if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
+            (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
+                await sleep(5);
+            }
+
+        if (vertex[0] === finishLocation[0] && vertex[1] === finishLocation[1]) {
+            console.log("PATH", path)
+            return path
+        }
+
+        let directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+
+        for (let dir of directions) {
+            let nextVertex = [vertex[0] + dir[0], vertex[1] + dir[1]];
+
+            if (
+                nextVertex[0] >= 0 && nextVertex[0] < grid.length &&
+                nextVertex[1] >= 0 && nextVertex[1] < grid[0].length &&
+                !grid[nextVertex[0]][nextVertex[1]].isWall &&
+                !visited.has(nextVertex.toString())
+            ) {
+                visited.add(nextVertex.toString());
+                let newDistance = distance + grid[nextVertex[0]][nextVertex[1]].weight;
+                distances.set(nextVertex.toString(), newDistance);
+                queue.push([nextVertex, [...path, nextVertex], newDistance]);
+            }   
+        }
+
+        queue.sort((a, b) => a[2] - b[2]);
+    }
+    console.log("NO PATH FOUND")
+    return null
+}
+
+
+// A* ALGORITHM
+const aStarAlgorithm = async (grid, start, finish) => {
+    let startLocation = [start.x, start.y]
+    let finishLocation = [finish.x, finish.y]
+    let queue = [[startLocation, [startLocation], 0]];
+    let visited = new Set([start.toString()]);
+    let distances = new Map();
+    distances.set(startLocation.toString(), 0);
+
+    while (queue.length > 0) {
+        let [vertex, path, distance] = queue.shift();
+
+        // If it's not the start or finish, color the cell and wait
+        if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
+            (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
+                await sleep(5);
+            }
+
+        if (vertex[0] === finishLocation[0] && vertex[1] === finishLocation[1]) {
+            console.log("PATH", path)
+            return path
+        }
+
+        let directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+
+        for (let dir of directions) {
+            let nextVertex = [vertex[0] + dir[0], vertex[1] + dir[1]];
+
+            if (
+                nextVertex[0] >= 0 && nextVertex[0] < grid.length &&
+                nextVertex[1] >= 0 && nextVertex[1] < grid[0].length &&
+                !grid[nextVertex[0]][nextVertex[1]].isWall &&
+                !visited.has(nextVertex.toString())
+            ) {
+                visited.add(nextVertex.toString());
+                let newDistance = distance + grid[nextVertex[0]][nextVertex[1]].weight;
+                distances.set(nextVertex.toString(), newDistance);
+                queue.push([nextVertex, [...path, nextVertex], newDistance + heuristic(nextVertex, finishLocation)]);
+            }
+        }
+
+        queue.sort((a, b) => a[2] - b[2]);
+    }
+    console.log("NO PATH FOUND")
+    return null
+}
+
+// HEURISTIC FUNCTION
+const heuristic = (a, b) => {
+    return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
+}
+
 
 createGrid();
