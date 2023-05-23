@@ -23,7 +23,7 @@ let selectWall = document.getElementById('select-wall').addEventListener('click'
 
 let startTraversal = document
 .getElementById('start-traversal')
-.addEventListener('click', ()=> {
+.addEventListener('click', async ()=> {
     selectingWall = false; // Disable wall selection
     let traversalMethod = document.getElementById('traversal-method').value;
     if (startCell === null) {
@@ -31,12 +31,16 @@ let startTraversal = document
     } else if (finishCell === null) {
         alert("Please set a Finish Location")
     } else {
+        let path = null;
         if (traversalMethod === 'depthFirstSearch') {
-            depthFirstSearch(cells, startCell, finishCell)
+            path = await depthFirstSearch(cells, startCell, finishCell)
         } else if (traversalMethod === 'breadthFirstSearch') {
-            breadthFirstSearch(cells, startCell, finishCell)
+            path = await breadthFirstSearch(cells, startCell, finishCell)
         } else {
             console.log("Invalid traversal method")
+        }
+        if (path) {
+            await iterateOverPath(path)
         }
     }});
 
@@ -230,6 +234,18 @@ const clearTheBoard = () => {
 // SLEEPER FUNCTION
 const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+
+// ITERATE OVER PATH
+const iterateOverPath = async (path) => {
+    if (path) {
+        for (let i = 0; i < path.length; i++) {
+            let location = path[i];
+            cells[location[0]][location[1]].element.style.backgroundColor = 'aquamarine';
+            await sleep(10)
+        }
+    }
 }
 
 
