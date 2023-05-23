@@ -6,6 +6,13 @@ let startCell = null;
 let finishCell = null;
 let mouseDown = false;
 
+// COLOURS
+const startColour = '#235ec4';
+const finishColour = '#db2113';
+const wallColour = 'black';
+const cellColour = '#f7c6a8';
+const pathColour = '#C38D9E';
+
 // BUTTONS
 let selectStart = document.getElementById('select-start').addEventListener('click', () => {
     selectingStart = true;
@@ -29,6 +36,7 @@ let addWeights = document.getElementById('add-weights').addEventListener('click'
 let startTraversal = document
 .getElementById('start-traversal')
 .addEventListener('click', async ()=> {
+    // clearPath();
     selectingWall = false; // Disable wall selection
     let traversalMethod = document.getElementById('traversal-method').value;
     if (startCell === null) {
@@ -63,14 +71,19 @@ let clearPath = document.getElementById('clear-path').addEventListener('click', 
     resetPath();
 })
 
+let clearWeights = document.getElementById('clear-weights').addEventListener('click', () => {
+    selectingWall = false;
+    removeAllWeights();
+})
+
 
 // CREATE THE GRID
 const createGrid = () => {
     const grid = document.getElementById('grid')
 
-    for (let i = 0; i < 46; i++) {
+    for (let i = 0; i < 40; i++) { // 46
         const row = []
-        for (let j = 0; j < 71; j++) {
+        for (let j = 0; j < 40; j++) { // 71
             const cellElement = document.createElement('div');
             cellElement.classList.add('cell');
             grid.appendChild(cellElement);
@@ -92,7 +105,7 @@ const createGrid = () => {
                 if (selectingStart) {
                     removeStartLocation();
                     cell.isStart = true;
-                    cellElement.style.backgroundColor = 'green';
+                    cellElement.style.backgroundColor = startColour;
                     selectingStart = false;
                     startCell = cell
                     console.log("START", cell)
@@ -104,7 +117,7 @@ const createGrid = () => {
                 if (selectingFinish) {
                     removeFinishLocation();
                     cell.isFinish = true;
-                    cellElement.style.backgroundColor = 'red';
+                    cellElement.style.backgroundColor = finishColour;
                     selectingFinish = false;
                     finishCell = cell
                     console.log("FINISH", cell)
@@ -117,7 +130,7 @@ const createGrid = () => {
             cellElement.addEventListener('click', () => {
                 if (selectingWall) {
                     cell.isWall = true;
-                    cellElement.style.backgroundColor = 'black'
+                    cellElement.style.backgroundColor = wallColour;
                 }
             })
 
@@ -125,14 +138,14 @@ const createGrid = () => {
                 if (selectingWall) {
                     mouseDown = true;
                     cell.isWall = true;
-                    cellElement.style.backgroundColor = 'black';
+                    cellElement.style.backgroundColor = wallColour;
                 }
             })
 
             cellElement.addEventListener('mouseenter', () => {
                 if (selectingWall && mouseDown) {
                     cell.isWall = true;
-                    cellElement.style.backgroundColor = 'black';
+                    cellElement.style.backgroundColor = wallColour;
                 }
             })
 
@@ -154,7 +167,7 @@ const removeStartLocation = () => {
         for (let j = 0; j < cells[i].length; j++) {
             if (cells[i][j].isStart) {
                 cells[i][j].isStart = false;
-                cells[i][j].element.style.backgroundColor = "antiquewhite";
+                cells[i][j].element.style.backgroundColor = cellColour;
             }
         }
     }
@@ -196,7 +209,7 @@ const removeFinishLocation = () => {
         for (let j = 0; j < cells[i].length; j++) {
             if (cells[i][j].isFinish) {
                 cells[i][j].isFinish = false;
-                cells[i][j].element.style.backgroundColor = "antiquewhite";
+                cells[i][j].element.style.backgroundColor = cellColour;
             }
         }
     }
@@ -234,7 +247,7 @@ const resetPath = () => {
             if (cells[i][j].isWall || cells[i][j].isStart || cells[i][j].isFinish) {
                 continue;
             } else {
-                cells[i][j].element.style.backgroundColor = "antiquewhite";
+                cells[i][j].element.style.backgroundColor = cellColour;
             }
         }
     }
@@ -290,7 +303,7 @@ const depthFirstSearch = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = pathColour;
                 await sleep(5);
             }
 
@@ -333,7 +346,7 @@ const breadthFirstSearch = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = pathColour;
                 await sleep(5);
             }
 
@@ -369,8 +382,6 @@ const dijkstrasAlgorithm = async (grid, start, finish) => {
     let finishLocation = [finish.x, finish.y]
     let queue = [[startLocation, [startLocation], 0]];
     let visited = new Set([start.toString()]);
-    let distances = new Map();
-    distances.set(startLocation.toString(), 0);
 
     while (queue.length > 0) {
         let [vertex, path, distance] = queue.shift();
@@ -378,7 +389,7 @@ const dijkstrasAlgorithm = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = pathColour;
                 await sleep(5);
             }
 
@@ -400,7 +411,6 @@ const dijkstrasAlgorithm = async (grid, start, finish) => {
             ) {
                 visited.add(nextVertex.toString());
                 let newDistance = distance + grid[nextVertex[0]][nextVertex[1]].weight;
-                distances.set(nextVertex.toString(), newDistance);
                 queue.push([nextVertex, [...path, nextVertex], newDistance]);
             }   
         }
@@ -417,9 +427,7 @@ const aStarAlgorithm = async (grid, start, finish) => {
     let startLocation = [start.x, start.y]
     let finishLocation = [finish.x, finish.y]
     let queue = [[startLocation, [startLocation], 0]];
-    let visited = new Set([start.toString()]);
-    let distances = new Map();
-    distances.set(startLocation.toString(), 0);
+    let visited  = new Set([start.toString()]);
 
     while (queue.length > 0) {
         let [vertex, path, distance] = queue.shift();
@@ -427,7 +435,7 @@ const aStarAlgorithm = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = pathColour;
                 await sleep(5);
             }
 
@@ -449,7 +457,6 @@ const aStarAlgorithm = async (grid, start, finish) => {
             ) {
                 visited.add(nextVertex.toString());
                 let newDistance = distance + grid[nextVertex[0]][nextVertex[1]].weight;
-                distances.set(nextVertex.toString(), newDistance);
                 queue.push([nextVertex, [...path, nextVertex], newDistance + heuristic(nextVertex, finishLocation)]);
             }
         }

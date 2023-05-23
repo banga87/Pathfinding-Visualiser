@@ -1,6 +1,8 @@
 body {
     max-width: 1200px;
     margin: auto;
+    background-color: #84CDCA;
+    font-family: 'Roboto', sans-serif;
 }
 
 .menu {
@@ -11,6 +13,9 @@ body {
 
 button {
     margin: 20px;
+    width: 100px;
+    height: 50px;
+
 }
 
 .grid-container {
@@ -22,23 +27,21 @@ button {
 
 #grid {
     display: grid;
-    grid-template-columns: repeat(71, 15px);
-    grid-template-rows: repeat(46, 15px);
+    grid-template-columns: repeat(40, 15px);
+    grid-template-rows: repeat(40, 15px);
     gap: 1px;
-    width: 1065px; /* 15px * 71 cells */
-    height: 690px;
+    width: 647px; /* 15px * 71 cells */
+    height: 647px;
+    border: 3px solid #2c4643;
+    box-sizing: border-box;
 }
 .cell {
     width: 15px;
     height: 15px;
     border: 1px solid grey;
-    background-color: antiquewhite;
-}
-.start {
-    background-color: green;
-}
-.finish {
-    background-color: red;
+    background-color: #f7c6a8;
+    text-align: center;
+    font-size: 10px;
 }
 
 
