@@ -45,6 +45,11 @@ let clearBoard = document.getElementById('clear-board').addEventListener('click'
     clearTheBoard();
 })
 
+let clearPath = document.getElementById('clear-path').addEventListener('click', () => {
+    selectingWall = false;
+    resetPath();
+})
+
 
 // CREATE THE GRID
 const createGrid = () => {
@@ -196,7 +201,11 @@ const removeVisitedStatus = () => {
 const resetPath = () => {
     for (let i = 0; i < cells.length; i++) {
         for (let j = 0; j < cells[i].length; j++) {
-            cells[i][j].element.style.backgroundColor = "antiquewhite";
+            if (cells[i][j].isWall || cells[i][j].isStart || cells[i][j].isFinish) {
+                continue;
+            } else {
+                cells[i][j].element.style.backgroundColor = "antiquewhite";
+            }
         }
     }
 }
