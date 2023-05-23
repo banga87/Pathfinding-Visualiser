@@ -2,7 +2,7 @@ body {
     width: 1000px;
     margin: auto;
     background-color: #84CDCA;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Newsreader', serif;
     display: flex;
     justify-content: space-between;
     align-items: center; /* align items vertically in the center */
@@ -20,6 +20,9 @@ button {
     margin: 20px;
     width: 100px;
     height: 50px;
+    background-color: #F97E82;
+    color: #2c4643;
+    font-weight: 700;
 }
 
 .main-content {
@@ -34,6 +37,7 @@ button {
     margin-top: 50px;
     display: flex;
     justify-content: end;
+    flex-direction: column;
 }
 
 .grid-container {
