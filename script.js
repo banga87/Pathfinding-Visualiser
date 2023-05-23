@@ -25,19 +25,26 @@ let startTraversal = document
 .getElementById('start-traversal')
 .addEventListener('click', ()=> {
     selectingWall = false; // Disable wall selection
+    let traversalMethod = document.getElementById('traversal-method').value;
     if (startCell === null) {
         alert("Please set a Start Location")
     } else if (finishCell === null) {
         alert("Please set a Finish Location")
     } else {
-        depthFirstSearch(cells, startCell, finishCell)
-    }
-});
+        if (traversalMethod === 'depthFirstSearch') {
+            depthFirstSearch(cells, startCell, finishCell)
+        } else if (traversalMethod === 'breadthFirstSearch') {
+            breadthFirstSearch(cells, startCell, finishCell)
+        } else {
+            console.log("Invalid traversal method")
+        }
+    }});
 
 let clearBoard = document.getElementById('clear-board').addEventListener('click', () => {
     selectingWall = false;
     clearTheBoard();
 })
+
 
 // CREATE THE GRID
 const createGrid = () => {
@@ -114,6 +121,7 @@ const createGrid = () => {
             cellElement.addEventListener('mouseup', () => {
                 mouseDown = false;
             })
+
 
             row.push(cell);
         }
@@ -230,7 +238,7 @@ const depthFirstSearch = async (grid, start, finish) => {
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
                 grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
-                await sleep(10);
+                await sleep(5);
             }
 
         if (vertex[0] === finishLocation[0] && vertex[1] === finishLocation[1]) {
@@ -251,6 +259,49 @@ const depthFirstSearch = async (grid, start, finish) => {
             ) {
                 visited.add(nextVertex.toString());
                 stack.push([nextVertex, [...path, nextVertex]])
+            }
+        }
+    }
+    console.log("NO PATH FOUND")
+    return null
+}
+
+
+// BREADTH FIRST SEARCH
+const breadthFirstSearch = async (grid, start, finish) => {
+    let startLocation = [start.x, start.y]
+    let finishLocation = [finish.x, finish.y]
+    let queue = [[startLocation, [startLocation]]];
+    let visited = new Set([start.toString()]);
+
+    while (queue.length > 0) {
+        let [vertex, path] = queue.shift();
+
+        // If it's not the start or finish, color the cell and wait
+        if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
+            (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = 'coral';
+                await sleep(5);
+            }
+
+        if (vertex[0] === finishLocation[0] && vertex[1] === finishLocation[1]) {
+            console.log("PATH", path)
+            return path
+        }
+
+        let directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+
+        for (let dir of directions) {
+            let nextVertex = [vertex[0] + dir[0], vertex[1] + dir[1]];
+
+            if (
+                nextVertex[0] >= 0 && nextVertex[0] < grid.length &&
+                nextVertex[1] >= 0 && nextVertex[1] < grid[0].length &&
+                !grid[nextVertex[0]][nextVertex[1]].isWall &&
+                !visited.has(nextVertex.toString())
+            ) {
+                visited.add(nextVertex.toString());
+                queue.push([nextVertex, [...path, nextVertex]])
             }
         }
     }
