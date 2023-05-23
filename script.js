@@ -242,8 +242,12 @@ const iterateOverPath = async (path) => {
     if (path) {
         for (let i = 0; i < path.length; i++) {
             let location = path[i];
-            cells[location[0]][location[1]].element.style.backgroundColor = 'aquamarine';
-            await sleep(10)
+            if (cells[location[0]][location[1]].isStart || cells[location[0]][location[1]].isFinish) {
+                continue;
+            } else {
+                cells[location[0]][location[1]].element.style.backgroundColor = 'aquamarine';
+                await sleep(10);
+            }
         }
     }
 }
