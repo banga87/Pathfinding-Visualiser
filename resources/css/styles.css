@@ -1,21 +1,39 @@
 body {
-    max-width: 1200px;
+    width: 1000px;
     margin: auto;
     background-color: #84CDCA;
     font-family: 'Roboto', sans-serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* align items vertically in the center */
 }
 
 .menu {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    justify-items: center;
+    width: 300px;
 }
 
 button {
     margin: 20px;
     width: 100px;
     height: 50px;
+}
 
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.method-container {
+    margin-bottom: 20px; /* add some space beneath the select */
+    margin-top: 50px;
+    display: flex;
+    justify-content: end;
 }
 
 .grid-container {
@@ -35,6 +53,7 @@ button {
     border: 3px solid #2c4643;
     box-sizing: border-box;
 }
+
 .cell {
     width: 15px;
     height: 15px;
@@ -43,5 +62,3 @@ button {
     text-align: center;
     font-size: 10px;
 }
-
-

@@ -9,20 +9,24 @@
         <button id="select-start">SELECT START</button>
         <button id="select-finish">SELECT FINISH</button>
         <button id="select-wall">ADD WALLS</button>
-        <select id="traversal-method">
-            <option value="breadthFirstSearch">BREADTH-FIRST SEARCH</option>
-            <option value="depthFirstSearch">DEPTH-FIRST SEARCH</option>
-            <option value="dijkstra">DIJKSTRA'S ALGORITHM</option>
-            <option value="aStar">A* SEARCH</option>
-        </select>
         <button id="add-weights">ADD WEIGHTS</button>
         <button id="start-traversal">GO!</button>
         <button id="clear-weights">CLEAR WEIGHTS</button>
         <button id="clear-path">CLEAR PATH</button>
         <button id="clear-board">CLEAR BOARD</button>
     </div>
-    <div class="grid-container">
-        <div id="grid"></div>
+    <div class="main-content">
+        <div class="method-container">
+            <select id="traversal-method">
+                <option value="breadthFirstSearch">BREADTH-FIRST SEARCH</option>
+                <option value="depthFirstSearch">DEPTH-FIRST SEARCH</option>
+                <option value="dijkstra">DIJKSTRA'S ALGORITHM</option>
+                <option value="aStar">A* SEARCH</option>
+            </select>
+        </div>
+        <div class="grid-container">
+            <div id="grid"></div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
