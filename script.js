@@ -11,7 +11,8 @@ const startColour = '#235ec4';
 const finishColour = '#db2113';
 const wallColour = 'black';
 const cellColour = '#f7c6a8';
-const pathColour = '#C38D9E';
+const exploreColour = '#C38D9E';
+const pathColour = '#eada4b';
 
 // BUTTONS
 let selectStart = document.getElementById('select-start').addEventListener('click', () => {
@@ -282,7 +283,7 @@ const iterateOverPath = async (path) => {
             if (cells[location[0]][location[1]].isStart || cells[location[0]][location[1]].isFinish) {
                 continue;
             } else {
-                cells[location[0]][location[1]].element.style.backgroundColor = 'aquamarine';
+                cells[location[0]][location[1]].element.style.backgroundColor = pathColour;
                 await sleep(10);
             }
         }
@@ -303,7 +304,7 @@ const depthFirstSearch = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = pathColour;
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = exploreColour;
                 await sleep(5);
             }
 
@@ -346,7 +347,7 @@ const breadthFirstSearch = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = pathColour;
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = exploreColour;
                 await sleep(5);
             }
 
@@ -389,7 +390,7 @@ const dijkstrasAlgorithm = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = pathColour;
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = exploreColour;
                 await sleep(5);
             }
 
@@ -435,7 +436,7 @@ const aStarAlgorithm = async (grid, start, finish) => {
         // If it's not the start or finish, color the cell and wait
         if ((vertex[0] !== startLocation[0] || vertex[1] !== startLocation[1]) &&
             (vertex[0] !== finishLocation[0] || vertex[1] !== finishLocation[1])) {
-                grid[vertex[0]][vertex[1]].element.style.backgroundColor = pathColour;
+                grid[vertex[0]][vertex[1]].element.style.backgroundColor = exploreColour;
                 await sleep(5);
             }
 
