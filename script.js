@@ -2,6 +2,7 @@ const cells = []
 let selectingStart = false;
 let selectingFinish = false;
 let selectingWall = false;
+let removingWall = false;
 let startCell = null;
 let finishCell = null;
 let mouseDown = false;
@@ -18,20 +19,29 @@ const pathColour = '#eada4b';
 let selectStart = document.getElementById('select-start').addEventListener('click', () => {
     selectingStart = true;
     selectingWall = false; // Disable wall selection
+    removingWall = false;
 });
 
 let selectFinish = document.getElementById('select-finish').addEventListener('click', () => {
     selectingFinish = true;
     selectingWall = false; // Disable wall selection
+    removingWall = false;
 })
 
 let selectWall = document.getElementById('select-wall').addEventListener('click', () => {
     selectingWall = !selectingWall;
+    removingWall = false;
 })
 
 let addWeights = document.getElementById('add-weights').addEventListener('click', () => {
     selectingWall = !selectingWall;
+    removingWall = false;
     randomizeWeights();
+})
+
+let removeWall = document.getElementById('remove-wall').addEventListener('click', () => {
+    selectingWall = false;
+    removingWall = !removingWall;
 })
 
 let startTraversal = document
@@ -64,16 +74,19 @@ let startTraversal = document
 
 let clearBoard = document.getElementById('clear-board').addEventListener('click', () => {
     selectingWall = false;
+    removingWall = false;
     clearTheBoard();
 })
 
 let clearPath = document.getElementById('clear-path').addEventListener('click', () => {
     selectingWall = false;
+    removingWall = false;
     resetPath();
 })
 
 let clearWeights = document.getElementById('clear-weights').addEventListener('click', () => {
     selectingWall = false;
+    removingWall = false;
     removeAllWeights();
 })
 
@@ -126,7 +139,6 @@ const createGrid = () => {
             })
 
             // ONCLICK SET THE CELL TO WALL
-            cell
 
             cellElement.addEventListener('click', () => {
                 if (selectingWall) {
@@ -154,6 +166,33 @@ const createGrid = () => {
                 mouseDown = false;
             })
 
+
+            // ONCLICK REMOVE THE WALL
+            cellElement.addEventListener('click', () => {
+                if (removingWall) {
+                    cell.isWall = false;
+                    cellElement.style.backgroundColor = cellColour;
+                }
+            })
+
+            cellElement.addEventListener('mousedown', () => {
+                if (removingWall) {
+                    mouseDown = true;
+                    cell.isWall = false;
+                    cellElement.style.backgroundColor = cellColour;
+                }
+            })
+
+            cellElement.addEventListener('mouseenter', () => {
+                if (removingWall && mouseDown) {
+                    cell.isWall = false;
+                    cellElement.style.backgroundColor = cellColour;
+                }
+            })
+
+            cellElement.addEventListener('mouseup', () => {
+                mouseDown = false;
+            })
 
             row.push(cell);
         }
