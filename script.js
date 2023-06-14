@@ -44,6 +44,24 @@ let removeWall = document.getElementById('remove-wall').addEventListener('click'
     removingWall = !removingWall;
 })
 
+let clearBoard = document.getElementById('clear-board').addEventListener('click', () => {
+    selectingWall = false;
+    removingWall = false;
+    clearTheBoard();
+})
+
+let clearPath = document.getElementById('clear-path').addEventListener('click', () => {
+    selectingWall = false;
+    removingWall = false;
+    resetPath();
+})
+
+let clearWeights = document.getElementById('clear-weights').addEventListener('click', () => {
+    selectingWall = false;
+    removingWall = false;
+    removeAllWeights();
+})
+
 let startTraversal = document
 .getElementById('start-traversal')
 .addEventListener('click', async ()=> {
@@ -71,24 +89,6 @@ let startTraversal = document
             await iterateOverPath(path)
         }
     }});
-
-let clearBoard = document.getElementById('clear-board').addEventListener('click', () => {
-    selectingWall = false;
-    removingWall = false;
-    clearTheBoard();
-})
-
-let clearPath = document.getElementById('clear-path').addEventListener('click', () => {
-    selectingWall = false;
-    removingWall = false;
-    resetPath();
-})
-
-let clearWeights = document.getElementById('clear-weights').addEventListener('click', () => {
-    selectingWall = false;
-    removingWall = false;
-    removeAllWeights();
-})
 
 
 // CREATE THE GRID
